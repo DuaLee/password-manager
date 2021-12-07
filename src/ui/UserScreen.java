@@ -103,10 +103,13 @@ public class UserScreen {
                 try {
                     if (deleteRadioButton.isSelected()) {
                         if (!entryName.getText().isEmpty()) {
-                            removeEntry(entryName.getText());
-
-                            statusLabel.setForeground(Color.black);
-                            statusLabel.setText(entryName.getText() + " removed.");
+                            if (removeEntry(entryName.getText())) {
+                                statusLabel.setForeground(Color.black);
+                                statusLabel.setText(entryName.getText() + " removed.");
+                            } else {
+                                statusLabel.setForeground(Color.red);
+                                statusLabel.setText(entryName.getText() + " not found.");
+                            }
                         } else {
                             statusLabel.setForeground(Color.red);
                             statusLabel.setText("Fields cannot be blank.");
@@ -269,7 +272,9 @@ public class UserScreen {
 //        tableData.addRow(new String[]{"Facebook.com", "alice4", "ilovebob4"});
     }
 
-    private void removeEntry(String entryName) throws IOException {
+    private Boolean removeEntry(String entryName) throws IOException {
+        Boolean found = false;
+
         File inputFile = new File(title);
         File tempFile = new File("temp");
 
@@ -282,18 +287,30 @@ public class UserScreen {
             String line = currentLine;
             String[] lineTemp = line.split(",");
 
-            if (lineTemp[0].equals(entryName)) continue;
+            if (lineTemp[0].equals(entryName)) {
+                found = true;
+                continue;
+            }
+
             writer.write(currentLine + System.getProperty("line.separator"));
+        }
+
+        writer.close();
+        reader.close();
+
+        if (found) {
+            if (inputFile.exists()) {
+                inputFile.delete();
+            }
+
+            tempFile.renameTo(inputFile);
         }
 
         if (tempFile.exists()) {
             tempFile.delete();
         }
 
-        writer.close();
-        reader.close();
-
-        tempFile.renameTo(inputFile);
+        return found;
     }
 
     private void addEntry(String entryName, String username, String password) throws IOException {
