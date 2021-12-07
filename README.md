@@ -4,7 +4,7 @@ Password manager provides a simple and portable JavaSwing application that store
 
 ## Usage
 ### Login Screen
-The .jar executable can be placed anywhere on your computer, however, it is recommended that you place it in its own folder, as the program directly interacts with your file system in order to create user accounts and temporary files.
+The package can be placed anywhere on your computer after extraction, however, it is recommended that you place it in its own folder, as the program directly interacts with your file system in order to create user accounts and temporary files.
 
 [![image.png](https://i.postimg.cc/7LLsFxGY/image.png)](https://postimg.cc/CRWsDpsW)
 
