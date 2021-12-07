@@ -19,6 +19,8 @@ public class LoginScreen extends JFrame {
     private JLabel statusLabel;
     private JButton newUserButton;
 
+    ImageIcon lock = new ImageIcon("./img/lock.png");
+
     public LoginScreen(String title) {
         super(title);
         this.setContentPane(loginPanel);
@@ -27,6 +29,8 @@ public class LoginScreen extends JFrame {
         this.setLocationRelativeTo(null);
         this.pack();
         this.setVisible(true);
+
+        this.setIconImage(lock.getImage());
 
         statusLabel.setForeground(Color.black);
         statusLabel.setText("Please input your login information.");

@@ -32,6 +32,8 @@ public class UserScreen {
     private static int rowIndex;
     private static int columnIndex;
 
+    ImageIcon unlock = new ImageIcon("./img/unlock.png");
+
     public UserScreen(String title, String key) {
         //UI theme - comment out line to return to java default
         this.title = title;
@@ -163,6 +165,8 @@ public class UserScreen {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        frame.setIconImage(unlock.getImage());
     }
 
     public static void main(String[] args) {
@@ -275,8 +279,8 @@ public class UserScreen {
         String currentLine;
 
         while ((currentLine = reader.readLine()) != null) {
-            String trimmedLine = currentLine.trim();
-            String[] lineTemp = trimmedLine.split(",");
+            String line = currentLine;
+            String[] lineTemp = line.split(",");
 
             if (lineTemp[0].equals(entryName)) continue;
             writer.write(currentLine + System.getProperty("line.separator"));
