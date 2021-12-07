@@ -1,6 +1,5 @@
 package ui;
 
-
 import encryptor.MasterEncryptor;
 
 import javax.swing.*;
@@ -14,7 +13,12 @@ import java.awt.event.*;
 import java.io.*;
 import java.security.GeneralSecurityException;
 
+/**
+ * User screen after user logs in successfully
+ * Displays login information entries and options to add, modify, and delete entries
+ */
 public class UserScreen {
+
     private JTable entryTable;
     private JPanel userPanel = new JPanel();
     private JTextField entryName;
@@ -29,16 +33,23 @@ public class UserScreen {
     private static String title;
     private static String key;
 
+    // determining mouse position for right click menu
     private static int rowIndex;
     private static int columnIndex;
 
-    ImageIcon unlock = new ImageIcon("./img/unlock.png");
+    private final ImageIcon UNLOCK_ICON = new ImageIcon("./img/unlock.png");
 
+    /**
+     * Create an instance of UserScreen with passed-in username and password
+     *
+     * @param title username
+     * @param key password
+     */
     public UserScreen(String title, String key) {
-        //UI theme - comment out line to return to java default
         this.title = title;
         this.key = key;
 
+        // UI theme to match system
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -47,11 +58,14 @@ public class UserScreen {
 
         $$$setupUI$$$();
 
+        // attempt to parse decrypted file
         try {
             populateTable();
         } catch (FileNotFoundException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
         }
+
+        ///// right click menu /////
 
         JPopupMenu popup = new JPopupMenu();
         JMenuItem copy = new JMenuItem("Copy");
@@ -77,6 +91,9 @@ public class UserScreen {
 
         });
 
+        //////////
+
+        // change mode to add/modify entry
         addModifyRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -87,6 +104,7 @@ public class UserScreen {
             }
         });
 
+        // change mode to delete entry
         deleteRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -144,6 +162,11 @@ public class UserScreen {
 
     }
 
+    /**
+     * Initialization for UserScreen JFrame and its parameters
+     *
+     * @throws FileNotFoundException
+     */
     public void create() throws FileNotFoundException {
         JFrame frame = new JFrame(title);
         frame.setContentPane(new UserScreen(frame.getTitle(), key).userPanel);
@@ -171,7 +194,7 @@ public class UserScreen {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        frame.setIconImage(unlock.getImage());
+        frame.setIconImage(UNLOCK_ICON.getImage());
     }
 
     public static void main(String[] args) {
@@ -186,6 +209,12 @@ public class UserScreen {
         frame.setVisible(true);
     }
 
+    /**
+     * Determines what to do if the user confirms logout dialog
+     *
+     * @throws IOException
+     * @throws GeneralSecurityException
+     */
     public void exitAction() throws IOException, GeneralSecurityException {
         MasterEncryptor encryptor = new MasterEncryptor();
         encryptor.encryptFile(title, key);
@@ -263,10 +292,12 @@ public class UserScreen {
         return userPanel;
     }
 
+    /**
+     * Initialize the empty table with column headers
+     */
     private void createUIComponents() {
         entryTable = new JTable(tableData);
         tableData.setColumnIdentifiers(new String[]{"Entry Name", "Username", "Password"});
-
 
 //        tableData.addRow(new String[]{"Google.com", "alice", "ilovebob"});
 //        tableData.addRow(new String[]{"Yahoo.com", "alice2", "ilovebob2"});
@@ -274,6 +305,13 @@ public class UserScreen {
 //        tableData.addRow(new String[]{"Facebook.com", "alice4", "ilovebob4"});
     }
 
+    /**
+     * Search for given entry name and remove all matching entries if found
+     *
+     * @param entryName
+     * @return true if entry exists
+     * @throws IOException
+     */
     private Boolean removeEntry(String entryName) throws IOException {
         Boolean found = false;
 
@@ -300,6 +338,7 @@ public class UserScreen {
         writer.close();
         reader.close();
 
+        // if entry is not found, it is not necessary to overwrite the original
         if (found) {
             if (inputFile.exists()) {
                 inputFile.delete();
@@ -315,6 +354,15 @@ public class UserScreen {
         return found;
     }
 
+    /**
+     * Add an entry if given entry name does not already exist, modify existing entry if found
+     *
+     * @param entryName
+     * @param username
+     * @param password
+     * @return true if entry exists
+     * @throws IOException
+     */
     private Boolean addEntry(String entryName, String username, String password) throws IOException {
         Boolean found = false;
 
@@ -330,6 +378,11 @@ public class UserScreen {
         return found;
     }
 
+    /**
+     * Populates the JTable with parsed entries from the decrypted file
+     *
+     * @throws FileNotFoundException
+     */
     private void populateTable() throws FileNotFoundException {
         DefaultTableModel model = (DefaultTableModel) entryTable.getModel();
         model.setRowCount(0);
@@ -341,6 +394,7 @@ public class UserScreen {
                 if (lineTemp.length == 3) {
                     tableData.addRow(lineTemp);
                 } else {
+                    // only occurs if the user file is corrupted or modified
                     tableData.addRow(new String[]{"Error", "Error", "Error"});
                 }
             }

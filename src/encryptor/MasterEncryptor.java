@@ -14,41 +14,48 @@ import javax.crypto.spec.PBEParameterSpec;
 
 /**
  * Symmetric encryption/decryption utility using DES algorithm
+ * Dependency class for password manager
  */
 public class MasterEncryptor {
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
     }
 
-    //8-byte salt sequence:
+    // static 8-byte salt sequence
     private static final byte[] salt = {
             (byte) 0x43, (byte) 0x76, (byte) 0x95, (byte) 0xc7,
             (byte) 0x5b, (byte) 0xd7, (byte) 0x45, (byte) 0x17
     };
 
+    /**
+     * Determine encryption algorithm and generate secret key from given password
+     *
+     * @param pass password
+     * @param decryptMode true if decrypting
+     * @return Cipher object
+     * @throws GeneralSecurityException
+     */
     private static Cipher makeCipher(String pass, Boolean decryptMode) throws GeneralSecurityException{
-
-        //Use a KeyFactory to derive the corresponding key from the passphrase:
+        // use the KeyFactory library to derive the corresponding key from the given password
         PBEKeySpec keySpec = new PBEKeySpec(pass.toCharArray());
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
         SecretKey key = keyFactory.generateSecret(keySpec);
 
-        //Create parameters from the salt and an arbitrary number of iterations:
-        PBEParameterSpec pbeParamSpec = new PBEParameterSpec(salt, 42);
+        // create parameters from the salt and an arbitrary number of iterations
+        PBEParameterSpec pbeParameterSpec = new PBEParameterSpec(salt, 42);
 
-        //Set up the cipher:
+        // set up the cipher
         Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
 
-        //Set the cipher mode to decryption or encryption:
-        if(decryptMode){
-            cipher.init(Cipher.ENCRYPT_MODE, key, pbeParamSpec);
+        // set the cipher mode to decryption or encryption
+        if (decryptMode){
+            cipher.init(Cipher.ENCRYPT_MODE, key, pbeParameterSpec);
         } else {
-            cipher.init(Cipher.DECRYPT_MODE, key, pbeParamSpec);
+            cipher.init(Cipher.DECRYPT_MODE, key, pbeParameterSpec);
         }
 
         return cipher;
     }
-
 
     /**
      * Encrypts given file with key
@@ -63,36 +70,35 @@ public class MasterEncryptor {
         byte[] decData;
         byte[] encData;
         File inFile = new File(fileName);
-        //Generate the cipher using key:
+
+        // generate the cipher using key
         Cipher cipher = MasterEncryptor.makeCipher(key, true);
 
-        //Read in the file:
+        // read in the file:
         FileInputStream inStream = new FileInputStream(inFile);
 
+        // figure out how many bytes are padded
         int blockSize = 8;
-        //Figure out how many bytes are padded
         int paddedCount = blockSize - ((int)inFile.length()  % blockSize );
 
-        //Figure out full size including padding
+        // figure out full size including padding
         int padded = (int)inFile.length() + paddedCount;
 
         decData = new byte[padded];
 
-
         inStream.read(decData);
-
         inStream.close();
 
-        //Write out padding bytes as per PKCS5 algorithm
-        for( int i = (int)inFile.length(); i < padded; ++i ) {
+        // write out padding bytes as per PKCS5 algorithm
+        for (int i = (int)inFile.length(); i < padded; ++i) {
             decData[i] = (byte)paddedCount;
         }
 
-        //Encrypt the file data:
+        // encrypt the file data
         encData = cipher.doFinal(decData);
 
 
-        //Write the encrypted data to a new file:
+        // write the encrypted data to a new file
         FileOutputStream outStream = new FileOutputStream(new File(fileName));
         outStream.write(encData);
         outStream.close();
@@ -104,7 +110,6 @@ public class MasterEncryptor {
      *
      * @param fileName
      * @param key
-     * @return
      * @throws GeneralSecurityException
      * @throws IOException
      */
@@ -114,31 +119,28 @@ public class MasterEncryptor {
         byte[] decData;
         File inFile = new File(fileName);
 
-        //Generate the cipher using key:
+        // generate the cipher using key
         Cipher cipher = MasterEncryptor.makeCipher(key, false);
 
-        //Read in the file:
+        // read in the file
         FileInputStream inStream = new FileInputStream(inFile );
         encData = new byte[(int)inFile.length()];
+
         inStream.read(encData);
         inStream.close();
-        //Decrypt the file data:
+
+        // decrypt the file data
         decData = cipher.doFinal(encData);
 
-        //Figure out how much padding to remove
-
+        // figure out how much padding to remove
         int padCount = (int)decData[decData.length - 1];
 
-        //Naive check, will fail if plaintext file actually contained
-        //this at the end
-        //For robust check, check that padCount bytes at the end have same value
-        if( padCount >= 1 && padCount <= 8 ) {
+        // check that padCount bytes at the end have same value
+        if (padCount >= 1 && padCount <= 8) {
             decData = Arrays.copyOfRange( decData , 0, decData.length - padCount);
         }
 
-        //Write the decrypted data to a new file:
-        //return decData;
-
+        // write the decrypted data to a new file
         FileOutputStream target = new FileOutputStream(new File(fileName));
         target.write(decData);
         target.close();

@@ -1,15 +1,19 @@
 package ui;
 
+import encryptor.MasterEncryptor;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.security.GeneralSecurityException;
 
-import encryptor.MasterEncryptor;
-
+/**
+ * Initial screen that gives users an option to create an account or login to an existing account
+ */
 public class LoginScreen extends JFrame {
 
     private JTextField usernameField;
@@ -19,8 +23,13 @@ public class LoginScreen extends JFrame {
     private JLabel statusLabel;
     private JButton newUserButton;
 
-    ImageIcon lock = new ImageIcon("./img/lock.png");
+    private final ImageIcon LOCK_ICON = new ImageIcon("./img/lock.png");
 
+    /**
+     * Creates an instance of LoginScreen with given window title
+     *
+     * @param title
+     */
     public LoginScreen(String title) {
         super(title);
         this.setContentPane(loginPanel);
@@ -30,14 +39,14 @@ public class LoginScreen extends JFrame {
         this.pack();
         this.setVisible(true);
 
-        this.setIconImage(lock.getImage());
+        this.setIconImage(LOCK_ICON.getImage());
 
         statusLabel.setForeground(Color.black);
         statusLabel.setText("Please input your login information.");
 
+        // UI theme to match system
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,7 +59,7 @@ public class LoginScreen extends JFrame {
                         MasterEncryptor encryptor = new MasterEncryptor();
                         encryptor.decryptFile(usernameField.getText(), passwordPasswordField.getText());
 
-                        // send to next page
+                        // pass on to UserScreen after disposing current window
                         dispose();
                         UserScreen frame = new UserScreen(usernameField.getText(), passwordPasswordField.getText());
                         frame.create();
@@ -71,19 +80,20 @@ public class LoginScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (!usernameField.getText().isEmpty() && !passwordPasswordField.getText().isEmpty()) {
                     try {
-                        FileWriter newFile = new FileWriter(usernameField.getText());
-                        newFile.close();
+                        // checks if user already exists in the directory
+                        if (!new File(usernameField.getText()).exists()) {
+                            FileWriter newFile = new FileWriter(usernameField.getText());
+                            newFile.close();
 
-                        MasterEncryptor encryptor = new MasterEncryptor();
-                        encryptor.encryptFile(usernameField.getText(), passwordPasswordField.getText());
+                            MasterEncryptor encryptor = new MasterEncryptor();
+                            encryptor.encryptFile(usernameField.getText(), passwordPasswordField.getText());
 
-//                        File tempFile = new File(usernameField.getText());
-//                        if (tempFile.exists()) {
-//                            tempFile.delete();
-//                        }
-
-                        statusLabel.setForeground(Color.black);
-                        statusLabel.setText("New user created, please log in.");
+                            statusLabel.setForeground(Color.black);
+                            statusLabel.setText("New user created, please log in.");
+                        } else {
+                            statusLabel.setForeground(Color.red);
+                            statusLabel.setText("User already exists.");
+                        }
                     } catch (IOException | GeneralSecurityException ioException) {
                         ioException.printStackTrace();
                     }
