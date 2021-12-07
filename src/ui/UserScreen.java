@@ -120,9 +120,11 @@ public class UserScreen {
                                         && !username.getText().isEmpty()
                                         && !password.getText().isEmpty()
                         ) {
-                            addEntry(entryName.getText(), username.getText(), password.getText());
-
-                            statusLabel.setText(entryName.getText() + " inserted.");
+                            if (addEntry(entryName.getText(), username.getText(), password.getText())) {
+                                statusLabel.setText(entryName.getText() + " modified.");
+                            } else {
+                                statusLabel.setText(entryName.getText() + " inserted.");
+                            }
                         } else {
                             statusLabel.setForeground(Color.red);
                             statusLabel.setText("Fields cannot be blank.");
@@ -313,11 +315,19 @@ public class UserScreen {
         return found;
     }
 
-    private void addEntry(String entryName, String username, String password) throws IOException {
+    private Boolean addEntry(String entryName, String username, String password) throws IOException {
+        Boolean found = false;
+
+        if (removeEntry(entryName)) {
+            found = true;
+        }
+
         FileWriter writer = new FileWriter(title, true);
         writer.write(entryName + "," + username + "," + password + System.getProperty("line.separator"));
 
         writer.close();
+
+        return found;
     }
 
     private void populateTable() throws FileNotFoundException {
