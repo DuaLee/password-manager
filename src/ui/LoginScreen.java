@@ -88,6 +88,8 @@ public class LoginScreen extends JFrame {
                             MasterEncryptor encryptor = new MasterEncryptor();
                             encryptor.encryptFile(usernameField.getText(), passwordPasswordField.getText());
 
+                            passwordPasswordField.setText("");
+
                             statusLabel.setForeground(Color.black);
                             statusLabel.setText("New user created, please log in.");
                         } else {
