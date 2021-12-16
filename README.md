@@ -64,6 +64,7 @@ The user will be shown a Java Swing JTable that is populated, upon initializatio
 
 ## Directory Structure
 | File | Description |
+| --- | --- |
 | doc | Resources used by the readme documentation |
 | img | Image resources used by the program |
 | out | Program output artifacts |
