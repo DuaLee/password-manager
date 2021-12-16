@@ -26,6 +26,10 @@ In the user screen, you can choose between "Add/Modify", and "Delete". The forme
 
 [![image.png](https://i.postimg.cc/85z7d00Y/image.png)](https://postimg.cc/zL4D805w)
 
+You can also change your master account information in the "Update Account" pane. You can choose to update one or both of your username and password.
+
+[![image.png](https://i.postimg.cc/7L6HP9kG/image.png)](https://postimg.cc/PCgs2mNT)
+
 Once you have completed your operations, be sure to click the "x" on the top bar of the window to logout and reencrypt your files.
 
 [![image.png](https://i.postimg.cc/5y31P4Qq/image.png)](https://postimg.cc/BPXdbGgX)
