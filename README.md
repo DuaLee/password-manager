@@ -3,7 +3,7 @@
 Password manager provides a simple and portable application that stores your passwords. Multiple different master accounts can be made, meaning you can use the password manager on shared devices securely. You will be prompted to enter a unique login with each launch in order to decrypt and access your saved passwords.
 
 ## Getting Started
-To get started, please navigate to the GitHub releases page and download the latest .zip package. Be sure to check back periodically for updates and security updates.
+To get started, please navigate to this repository's releases page or click the link below to download the latest .zip package. Be sure to check back periodically for updates and security updates.
 
 [Releases](https://github.com/DuaLee/password-manager/releases)
 
