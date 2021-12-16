@@ -1,6 +1,19 @@
 # Password Manager
+## Contents
+- [Overview](https://github.com/DuaLee/password-manager#overview)
+- [Getting Started](https://github.com/DuaLee/password-manager#getting-started)
+- [Usage](https://github.com/DuaLee/password-manager#usage)
+  - [Login Screen](https://github.com/DuaLee/password-manager#login-screen)
+  - [User Screen](https://github.com/DuaLee/password-manager#user-screen)
+- [Architecture Documentation](https://github.com/DuaLee/password-manager#architecture-documentation)
+- [Directory Structure](https://github.com/DuaLee/password-manager#directory-structure)
+
 ## Overview
 Password manager provides a simple and portable application that stores your passwords. Multiple different master accounts can be made, meaning you can use the password manager on shared devices securely. You will be prompted to enter a unique login with each launch in order to decrypt and access your saved passwords.
+
+Please be sure to read the license for information on fair use and applicable copyright laws in your country and/or jurisdiction.
+
+
 
 ## Getting Started
 To get started, please navigate to this repository's releases page or click the link below to download the latest .zip package. Be sure to check back periodically for updates and security updates.
@@ -48,3 +61,10 @@ Prompts the user to input a username and password. If a user is found, a new fil
 
 #### UserScreen
 The user will be shown a Java Swing JTable that is populated, upon initialization and after every update, by the decrypted userdata. The table's rows contain all of the entryname/username/password combos that the user has created. When an action is triggered by the user, the UserScreen will modify the userdata file with the provided parameters. Upon logout, the password (key), and the userdata is passed to the MasterEncryptor to be re-encrypted. Once the file is secure, the application is exited.
+
+## Directory Structure
+| File | Description |
+| doc | Resources used by the readme documentation |
+| img | Image resources used by the program |
+| out | Program output artifacts |
+| src | Source code |
