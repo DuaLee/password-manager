@@ -16,7 +16,7 @@ Please be sure to read the license for information on fair use and applicable co
 
 
 ## Getting Started
-To get started, please navigate to this repository's releases page or click the link below to download the latest .zip package. Be sure to check back periodically for updates and security updates.
+To get started, please navigate to this repository's releases page or click the link below to download the latest .zip package. Be sure to check back periodically for feature and security updates.
 
 [Releases](https://github.com/DuaLee/password-manager/releases)
 
