@@ -1,12 +1,12 @@
 # Password Manager
 ## Contents
-- [Overview](https://github.com/DuaLee/password-manager#overview)
-- [Getting Started](https://github.com/DuaLee/password-manager#getting-started)
-- [Usage](https://github.com/DuaLee/password-manager#usage)
-  - [Login Screen](https://github.com/DuaLee/password-manager#login-screen)
-  - [User Screen](https://github.com/DuaLee/password-manager#user-screen)
-- [Architecture Documentation](https://github.com/DuaLee/password-manager#architecture-documentation)
-- [Directory Structure](https://github.com/DuaLee/password-manager#directory-structure)
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+  - [Login Screen](#login-screen)
+  - [User Screen](#user-screen)
+- [Architecture Documentation](#architecture-documentation)
+- [Directory Structure](#directory-structure)
 
 ## Overview
 Password manager provides a simple and portable application that stores your passwords. Multiple different master accounts can be made, meaning you can use the password manager on shared devices securely. You will be prompted to enter a unique login with each launch in order to decrypt and access your saved passwords.
